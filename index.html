@@ -247,9 +247,23 @@
 		}
 
 		function parseInput(inputStr) {
-			const match = inputStr.match(/\((-?\d+),\s*(-?\d+)\)/);
-			if (match) return {x: parseInt(match[1]), y: parseInt(match[2])};
-			return null;
+    		const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+    		if (isMobile) {
+        		// Mobile: allow "2,3" or "2 3"
+        		const match = inputStr.match(/(-?\d+)[,\s]+(-?\d+)/);
+        		if (match) {
+            		return { x: parseInt(match[1]), y: parseInt(match[2]) };
+        		}
+    		} else {
+        	// Desktop: require (x, y)
+        		const match = inputStr.match(/\((-?\d+),\s*(-?\d+)\)/);
+        		if (match) {
+            		return { x: parseInt(match[1]), y: parseInt(match[2]) };
+        		}
+    		}
+
+    		return null;
 		}
 
 		function submitGuess() {
